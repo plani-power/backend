@@ -8,6 +8,7 @@ class PlaniBeApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//깃 테스트
 	}
 
 }
