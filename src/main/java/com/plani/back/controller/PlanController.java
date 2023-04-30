@@ -53,7 +53,7 @@ public class PlanController {
             } else {
                 result.put("resultCode", "200");
                 result.put("message", "success!");
-                result.put("onOff", "none");
+                result.put("onOff", "online offline both");
             }
         }catch (Exception e) {
             result.put("resultCode", "400");
