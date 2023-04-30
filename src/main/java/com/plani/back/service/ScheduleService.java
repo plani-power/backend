@@ -4,5 +4,6 @@ import java.util.Map;
 
 public interface ScheduleService {
 
-    Map<String ,Object> scheduleList ();
+    Map<String, Object> scheduleList();
+
 }
