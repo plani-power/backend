@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -18,7 +19,7 @@ public class PlanController {
     @GetMapping(value="plans")
     public Map<String, Object> planList(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> result = new HashMap<>();
-        Map<String, Object> planList = planService.planList();
+        List<Object> planList = planService.planList();
 
         try {
             result.put("planList", planList);
