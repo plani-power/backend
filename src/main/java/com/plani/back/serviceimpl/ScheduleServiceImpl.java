@@ -5,6 +5,7 @@ import com.plani.back.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -14,5 +15,5 @@ public class ScheduleServiceImpl implements ScheduleService {
     ScheduleMapper scheduleMapper;
 
     @Override
-    public Map<String, Object> scheduleList() {return scheduleMapper.scheduleList();}
+    public List<String> scheduleList() {return scheduleMapper.scheduleList();}
 }

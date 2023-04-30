@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ScheduleController {
@@ -18,7 +19,7 @@ public class ScheduleController {
     public Map<String, Object> schedules(HttpServletRequest request, HttpServletResponse response)
     {
         Map<String, Object> result = new HashMap<>();
-        Map<String, Object> schedulesList = scheduleService.scheduleList();
+        List<String> schedulesList = scheduleService.scheduleList();
 
         try {
          result.put("schedulesList",schedulesList);
