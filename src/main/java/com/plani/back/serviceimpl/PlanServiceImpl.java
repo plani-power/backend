@@ -22,4 +22,19 @@ public class PlanServiceImpl implements PlanService {
     public int createPlan(Map<String, Object> param) {
         return planMapper.createPlan(param);
     }
+
+    @Override
+    public Map<String, Object> planDetail(int planId) {
+        return planMapper.planDetail(planId);
+    }
+
+    @Override
+    public int updatePlan(Map<String, Object> param){
+        return planMapper.updatePlan(param);
+    }
+
+    @Override
+    public int deletePlan(int planId) {
+        return planMapper.deletePlan(planId);
+    }
 }

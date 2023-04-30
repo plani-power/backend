@@ -57,6 +57,59 @@ public class PlanController {
                 result.put("onOff", "online offline both");
             }
         }catch (Exception e) {
+            System.out.println(e);
+            result.put("resultCode", "400");
+            result.put("message", "Fail!!!");
+        }
+
+        return result;
+    }
+
+    @GetMapping(value="plans/{planId}")
+    public Map<String, Object> planDetail(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
+        Map<String, Object> result = new HashMap<>();
+
+        try{
+            Map<String, Object> planDetail = planService.planDetail(planId);
+            result.put("planDetail", planDetail);
+            result.put("resultCode", "200");
+            result.put("message", "success!!");
+        }catch (Exception e) {
+            result.put("resultCode", "400");
+            result.put("message", "Fail!!!");
+        }
+
+        return result;
+    }
+
+    @PutMapping(value="plans/{planId}")
+    public Map<String, Object> updatePlan(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId, @RequestBody Map<String, Object> param) {
+        Map<String, Object> result = new HashMap<>();
+        param.put("plan_id", planId);
+
+        planService.updatePlan(param);
+
+        try {
+            result.put("resultCode", "200");
+            result.put("message", "success!!");
+        }catch (Exception e) {
+            result.put("resultCode", "400");
+            result.put("message", "Fail!!!");
+        }
+
+        return result;
+    }
+
+    @DeleteMapping(value="plans/{planId}")
+    public Map<String, Object> deletePlan(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
+        Map<String, Object> result = new HashMap<>();
+
+        planService.deletePlan(planId);
+
+        try {
+            result.put("resultCode", "200");
+            result.put("message", "success!!");
+        }catch (Exception e) {
             result.put("resultCode", "400");
             result.put("message", "Fail!!!");
         }
