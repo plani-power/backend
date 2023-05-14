@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plani.back.mapper.PlanMapper">
+    <select id="planList" resultType="Map">
+        SELECT PLAN_ID,
+               PLAN_NAME,
+               CREATED_USER,
+               ONOFF_TYPE,
+               HASHTAG,
+               CREATE_PLAN_DATE,
+               UPDATE_PLAN_DATE,
+               IS_PUBLIC,
+               STATUS,
+               DEFAULT_TIME,
+               START_DATE,
+               END_DATE,
+               UPDATE_DATE
+        FROM PLAN_INFO
+    </select>
+
+    <insert id="createPlan" parameterType="Map">
+        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, UPDATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_TIME, START_DATE, END_DATE, UPDATE_DATE)
+        VALUES (#{plan_name}, #{created_user}, #{onoff_type}, #{hashtag}, now(), now(), #{is_public},
+                #{status}, #{default_time}, STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'), now());
+    </insert>
+</mapper>

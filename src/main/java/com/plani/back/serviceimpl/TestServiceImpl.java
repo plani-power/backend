@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class testServiceImpl implements TestService {
+public class TestServiceImpl implements TestService {
     @Autowired
     TestMapper testMapper;
 
