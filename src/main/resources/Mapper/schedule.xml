@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plani.back.mapper.ScheduleMapper">
+    <select id="scheduleList" resultType="Map">
+        SELECT
+            schedule_id,
+            AVAILABLE_SCHEDULE_START_DATE,
+            AVAILABLE_SCHEDULE_END_DATE,
+            AVAILABLE_SCHEDULE_START_TIME,
+            AVAILABLE_SCHEDULE_END_TIME,
+            RESPONSE_END_DATE_TIME,
+            IS_ONLINE,
+            LOCATION,
+            UPDATE_DATE,
+            CREATE_DATE,
+            SCHEDULED_DATE_TIME,
+            PLAN_ID
+        FROM TBL_SCHEDULE
+    </select>
+
+    <insert id="createSchedules" parameterType="Map">
+        INSERT INTO TBL_SCHEDULE
+            (AVAILABLE_SCHEDULE_START_DATE,
+             AVAILABLE_SCHEDULE_END_DATE,
+             AVAILABLE_SCHEDULE_START_TIME,
+             AVAILABLE_SCHEDULE_END_TIME,
+             RESPONSE_END_DATE_TIME,
+             IS_ONLINE,
+             LOCATION,
+             UPDATE_DATE,
+             CREATE_DATE,
+             SCHEDULED_DATE_TIME,
+             PLAN_ID)
+        VALUES (#{AVAILABLE_SCHEDULE_START_DATE},
+                #{AVAILABLE_SCHEDULE_END_DATE},
+                #{AVAILABLE_SCHEDULE_START_TIME},
+                #{AVAILABLE_SCHEDULE_END_TIME},
+                #{RESPONSE_END_DATE_TIME},
+                #{IS_ONLINE},
+                #{LOCATION},
+                null,
+                now());
+        ON DUPLICATE KEY UPDATE
+        AVAILABLE_SCHEDULE_START_DATE = #{AVAILABLE_SCHEDULE_START_DATE}
+        AVAILABLE_SCHEDULE_END_DATE = #{AVAILABLE_SCHEDULE_END_DATE}
+        AVAILABLE_SCHEDULE_START_TIME = #{AVAILABLE_SCHEDULE_START_TIME}
+        AVAILABLE_SCHEDULE_END_TIME = #{AVAILABLE_SCHEDULE_END_TIME}
+        RESPONSE_END_DATE_TIME = #{RESPONSE_END_DATE_TIME}
+        IS_ONLINE = #{IS_ONLINE}
+        LOCATION = #{LOCATION}
+        UPDATE_DATE = now()
+    </insert>
+
+    <delete id="deleteSchedules" parameterType="Map">
+        DELETE FROM TBL_SCHEDULE WHERE SCHEDULE_ID = #{SCHEDULE_ID};
+    </delete>
+</mapper>
