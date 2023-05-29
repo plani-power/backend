@@ -17,13 +17,51 @@
                DEFAULT_TIME,
                START_DATE,
                END_DATE,
-               UPDATE_DATE
+               MAX_MEMBER_NUM,
+               GENDER,
+               BIRTH_YEAR
         FROM PLAN_INFO
+        WHERE IS_DELETED = FALSE
     </select>
 
     <insert id="createPlan" parameterType="Map">
-        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, UPDATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_TIME, START_DATE, END_DATE, UPDATE_DATE)
+        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, UPDATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_TIME, START_DATE, END_DATE, MAX_MEMBER_NUM, GENDER, BIRTH_YEAR, IS_DELETED)
         VALUES (#{plan_name}, #{created_user}, #{onoff_type}, #{hashtag}, now(), now(), #{is_public},
-                #{status}, #{default_time}, STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'), now());
+                #{status}, #{default_time}, STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
+                #{max_member_num}, #{gender}, #{birth_year}, FALSE)
     </insert>
+
+    <select id="planDetail" resultType="Map">
+        SELECT PLAN_ID,
+               PLAN_NAME,
+               CREATED_USER,
+               ONOFF_TYPE,
+               HASHTAG,
+               CREATE_PLAN_DATE,
+               UPDATE_PLAN_DATE,
+               IS_PUBLIC,
+               STATUS,
+               DEFAULT_TIME,
+               START_DATE,
+               END_DATE,
+               MAX_MEMBER_NUM,
+               GENDER,
+               BIRTH_YEAR
+        FROM PLAN_INFO
+        WHERE PLAN_ID = #{plan_id}
+    </select>
+
+    <update id="updatePlan" parameterType="Map">
+        UPDATE PLAN_INFO
+        SET PLAN_NAME = #{plan_name}, ONOFF_TYPE = #{onoff_type}, HASHTAG = #{hashtag}, UPDATE_PLAN_DATE = now(), IS_PUBLIC = #{is_public}, STATUS = #{status},
+            DEFAULT_TIME = #{default_time}, START_DATE = STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), END_DATE = STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
+            MAX_MEMBER_NUM = #{max_member_num}, GENDER = #{gender}, BIRTH_YEAR = #{birth_year}
+        WHERE PLAN_ID = #{plan_id}
+    </update>
+
+    <delete id="deletePlan" parameterType="int">
+        UPDATE PLAN_INFO
+        SET IS_DELETED = TRUE, DELETED_DATE = NOW()
+        WHERE PLAN_ID = #{plan_id}
+    </delete>
 </mapper>
