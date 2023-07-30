@@ -38,9 +38,16 @@ public class PlanController {
     public Map<String, Object> createPlan(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String,Object> param) {
         Map<String, Object> result = new HashMap<>();
 
-
         try {
             planService.createPlan(param);
+
+            // 추후에 로그인 토큰 등이 개발되면 수정, 현재는 user 정보가 없기 때문에 하드코딩으로 넘어가겠습니다.
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("user_id", param.get("created_user").toString());
+            userInfo.put("plan_id", param.get("PLAN_ID"));
+            userInfo.put("role_type", "플랜장");
+
+            planService.planLeader(userInfo);
 
             String onOffType = param.get("onoff_type").toString();
             if(onOffType.equals("online")) {
@@ -108,6 +115,27 @@ public class PlanController {
 
         try {
             result.put("resultCode", "200");
+            result.put("message", "success!!");
+        }catch (Exception e) {
+            result.put("resultCode", "400");
+            result.put("message", "Fail!!!");
+        }
+
+        return result;
+    }
+
+    // 플랜 신청자 목록 조회
+
+    // 플랜 멤버 목록 조회
+    @GetMapping(value="plan-members/{planId}")
+    public Map<String, Object> planMembersList(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
+        Map<String, Object> result = new HashMap<>();
+
+        List<Object> memberList = planService.planMember(planId);
+
+        try {
+            result.put("resultCode", "200");
+            result.put("planMember", memberList);
             result.put("message", "success!!");
         }catch (Exception e) {
             result.put("resultCode", "400");

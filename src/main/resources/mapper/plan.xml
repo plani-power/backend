@@ -29,6 +29,13 @@
         VALUES (#{plan_name}, #{created_user}, #{onoff_type}, #{hashtag}, now(), now(), #{is_public},
                 #{status}, #{default_time}, STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
                 #{max_member_num}, #{gender}, #{birth_year}, FALSE)
+        <selectKey resultType="int" keyProperty="PLAN_ID" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="planLeader" parameterType="Map">
+        INSERT INTO TBL_PLAN_MEMBER (USER_ID, PLAN_ID, ROLE_TYPE, JOIN_DATE) VALUES (#{user_id}, #{plan_id}, #{role_type}, now());
     </insert>
 
     <select id="planDetail" resultType="Map">
@@ -64,4 +71,13 @@
         SET IS_DELETED = TRUE, DELETED_DATE = NOW()
         WHERE PLAN_ID = #{plan_id}
     </delete>
+
+    <select id="planMember" parameterType="int" resultType="Map">
+        SELECT B.USER_ID, C.USER_NICKNAME
+        FROM PLAN_INFO A JOIN TBL_PLAN_MEMBER B
+          ON A.PLAN_ID = B.PLAN_ID
+        JOIN TBL_USER C
+          ON B.USER_ID = C.USER_ID
+        WHERE A.PLAN_ID = #{plan_id}
+    </select>
 </mapper>

@@ -22,6 +22,10 @@ public class PlanServiceImpl implements PlanService {
     public int createPlan(Map<String, Object> param) {
         return planMapper.createPlan(param);
     }
+    @Override
+    public int planLeader(Map<String, Object> param) {
+        return planMapper.planLeader(param);
+    }
 
     @Override
     public Map<String, Object> planDetail(int planId) {
@@ -36,5 +40,10 @@ public class PlanServiceImpl implements PlanService {
     @Override
     public int deletePlan(int planId) {
         return planMapper.deletePlan(planId);
+    }
+
+    @Override
+    public List<Object> planMember (int planId) {
+        return planMapper.planMember(planId);
     }
 }
