@@ -25,10 +25,10 @@
     </select>
 
     <insert id="createPlan" parameterType="Map">
-        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, UPDATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_TIME, START_DATE, END_DATE, MAX_MEMBER_NUM, GENDER, BIRTH_YEAR, IS_DELETED)
+        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, UPDATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_TIME, START_DATE, END_DATE, MAX_MEMBER_NUM, GENDER, BIRTH_YEAR, IS_DELETED, PLAN_PWD)
         VALUES (#{plan_name}, #{created_user}, #{onoff_type}, #{hashtag}, now(), now(), #{is_public},
                 #{status}, #{default_time}, STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
-                #{max_member_num}, #{gender}, #{birth_year}, FALSE)
+                #{max_member_num}, #{gender}, #{birth_year}, FALSE, #{plan_pwd})
         <selectKey resultType="int" keyProperty="PLAN_ID" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
