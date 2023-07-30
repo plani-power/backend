@@ -39,6 +39,15 @@ public class PlanController {
         Map<String, Object> result = new HashMap<>();
 
         try {
+            System.out.println(param);
+            String isPublic = param.get("is_public").toString();
+            String planPwd = String.valueOf(param.get("plan_pwd"));
+
+            if("false".equals(isPublic) && ("".equals(planPwd) || "null".equals(planPwd))) {
+                result.put("resultCode", "400");
+                result.put("message", "비밀번호를 입력하세요.");
+                return result;
+            }
             planService.createPlan(param);
 
             // 추후에 로그인 토큰 등이 개발되면 수정, 현재는 user 정보가 없기 때문에 하드코딩으로 넘어가겠습니다.
