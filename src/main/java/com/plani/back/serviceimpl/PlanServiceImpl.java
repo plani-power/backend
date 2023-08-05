@@ -43,6 +43,11 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
+    public List<Object> planApplicant (int planId) {
+        return planMapper.planApplicant(planId);
+    }
+
+    @Override
     public List<Object> planMember (int planId) {
         return planMapper.planMember(planId);
     }

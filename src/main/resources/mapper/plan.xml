@@ -72,6 +72,16 @@
         WHERE PLAN_ID = #{plan_id}
     </delete>
 
+    <select id="planApplicant" parameterType="int" resultType="Map">
+        SELECT A.PLAN_NAME, C.USER_ID, C.USER_NICKNAME, B.STATUS, B.JOIN_DATE
+        FROM PLAN_INFO A JOIN TBL_PLAN_JOIN_MEMBER B
+          ON A.PLAN_ID = B.PLAN_ID
+        JOIN TBL_USER C
+          ON B.USER_ID = C.USER_ID
+        WHERE A.PLAN_ID = #{plan_id}
+          AND A.STATUS = '모집중'
+    </select>
+
     <select id="planMember" parameterType="int" resultType="Map">
         SELECT B.USER_ID, C.USER_NICKNAME
         FROM PLAN_INFO A JOIN TBL_PLAN_MEMBER B

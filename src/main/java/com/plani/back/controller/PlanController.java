@@ -134,6 +134,23 @@ public class PlanController {
     }
 
     // 플랜 신청자 목록 조회
+    @GetMapping(value="plan-applicants/{planId}")
+    public Map<String, Object> planApplicantsList(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
+        Map<String, Object> result = new HashMap<>();
+
+        List<Object> applicantList = planService.planApplicant(planId);
+
+        try {
+            result.put("resultCode", "200");
+            result.put("planMember", applicantList);
+            result.put("message", "success!!");
+        }catch (Exception e) {
+            result.put("resultCode", "400");
+            result.put("message", "Fail!!!");
+        }
+
+        return result;
+    }
 
     // 플랜 멤버 목록 조회
     @GetMapping(value="plan-members/{planId}")
