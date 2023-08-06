@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plani.back.mapper.JoinMapper">
+    <select id="planList" resultType="Map">
+        SELECT plan_id ,gender ,birth_year
+        FROM PLAN_INFO
+        WHERE plan_id = #{planid}
+    </select>
+
+    <select id="userList" resultType="Map">
+        SELECT user_gender,user_birth_year
+        FROM TBL_USER
+        WHERE USER_ID = #{userid}
+    </select>
+</mapper>
