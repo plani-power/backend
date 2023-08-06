@@ -170,4 +170,22 @@ public class PlanController {
 
         return result;
     }
+    // 플랜 상세조회 > 적극왕 조회
+    @GetMapping(value="joinKing/{planId}")
+    public Map<String, Object> joinKingList(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
+        Map<String, Object> result = new HashMap<>();
+
+        List<Object> joinKingList = planService.joinKing(planId);
+
+        try {
+            result.put("resultCode", "200");
+            result.put("planMember", joinKingList);
+            result.put("message", "success!!");
+        }catch (Exception e) {
+            result.put("resultCode", "400");
+            result.put("message", "Fail!!!");
+        }
+
+        return result;
+    }
 }

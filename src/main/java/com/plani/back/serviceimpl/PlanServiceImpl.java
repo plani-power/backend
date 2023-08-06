@@ -51,4 +51,8 @@ public class PlanServiceImpl implements PlanService {
     public List<Object> planMember (int planId) {
         return planMapper.planMember(planId);
     }
+
+    //플랜 상세보기 > 적극왕 조회
+    @Override
+    public List<Object> joinKing (int planId){return planMapper.joinKing(planId);}
 }
