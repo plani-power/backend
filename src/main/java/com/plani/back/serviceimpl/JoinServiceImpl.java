@@ -4,6 +4,7 @@ import com.plani.back.mapper.JoinMapper;
 import com.plani.back.service.JoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,41 +29,41 @@ public class JoinServiceImpl implements JoinService {
         String planBirthYear = planList.get("birth_year").toString();
 
         try{
-            if(planGender != null && planBirthYear != null){
+            if(!StringUtils.isEmpty(planGender) && !StringUtils.isEmpty(planBirthYear)){
                 //참여조건 둘다
 
                 //참여조건이 성별
                 if(planGender.equals(userGender)){
-                    result.put("성별 성공","성별 성공");
+                    result.put("Gender","Success");
                 }
                 else{
-                    result.put("성별 실패","성별 실패");
+                    result.put("Gender","Fail");
                 }
 
                 //참여조건 연령
-                if(Integer.parseInt(planBirthYear) < Integer.parseInt(userBirthYear)){
-                    result.put("연령 성공","연령 성공");
+                if(Integer.parseInt(planBirthYear) > Integer.parseInt(userBirthYear)){
+                    result.put("Birth","Success");
                 }
                 else{
-                    result.put("성별 실패","성별 실패");
+                    result.put("Birth","Fail");
                 }
             }
             else if(planGender != null){
                 //참여조건이 성별
                 if(planGender == userGender){
-                    result.put("성별 성공","성별 성공");
+                    result.put("Gender","Success");
                 }
                 else{
-                    result.put("성별 실패","성별 실패");
+                    result.put("Gender","Fail");
                 }
             }
             else if(planBirthYear != null){
                 //참여조건이 연령
                 if(Integer.parseInt(planBirthYear) < Integer.parseInt(userBirthYear)){
-                    result.put("연령 성공","연령 성공");
+                    result.put("Birth","Success");
                 }
                 else{
-                    result.put("성별 실패","성별 실패");
+                    result.put("Birth","Fail");
                 }
             }
         }catch (Exception e){

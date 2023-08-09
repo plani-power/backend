@@ -4,10 +4,7 @@ import com.plani.back.service.JoinService;
 import com.plani.back.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,15 +19,16 @@ public class JoinController {
     @Autowired
     JoinService joinService;
 
-    @GetMapping(value = "joinJudge")
-    public Map<String,Object> joinJudge(HttpServletRequest request, HttpServletResponse response,@RequestParam("userid") String userid,
-                                        @RequestParam("planid") int planid)
+    @GetMapping(value = "joinJudge/{userid}/{planid}")
+    public Map<String,Object> joinJudge(HttpServletRequest request, HttpServletResponse response,@PathVariable String userid,@PathVariable int planid)
     {
         Map<String,Object> result = new HashMap<>();
-        Map<String,Object> data = joinService.joinJudge(userid,planid);
+        Map<String,Object> joinJudgeList = joinService.joinJudge(userid,planid);
 
         try{
-
+            result.put("resultCode", "200");
+            result.put("joinJudgeList", joinJudgeList);
+            result.put("message", "success!!");
         }
         catch (Exception e){
             result.put("resultCode", "400");

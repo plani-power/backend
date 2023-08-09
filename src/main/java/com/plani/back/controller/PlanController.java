@@ -171,7 +171,7 @@ public class PlanController {
         return result;
     }
     // 플랜 상세조회 > 적극왕 조회
-    @GetMapping(value="joinKing/{planId}")
+    @GetMapping(value="plans/joinKing/{planId}")
     public Map<String, Object> joinKingList(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
         Map<String, Object> result = new HashMap<>();
 
@@ -179,7 +179,7 @@ public class PlanController {
 
         try {
             result.put("resultCode", "200");
-            result.put("planMember", joinKingList);
+            result.put("joinKingList", joinKingList);
             result.put("message", "success!!");
         }catch (Exception e) {
             result.put("resultCode", "400");
