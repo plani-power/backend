@@ -32,39 +32,62 @@ public class JoinServiceImpl implements JoinService {
             if(!StringUtils.isEmpty(planGender) && !StringUtils.isEmpty(planBirthYear)){
                 //참여조건 둘다
 
-                //참여조건이 성별
-                if(planGender.equals(userGender)){
-                    result.put("Gender","Success");
-                }
-                else{
-                    result.put("Gender","Fail");
-                }
+                boolean genderOk;
+                boolean birthOk;
 
-                //참여조건 연령
-                if(Integer.parseInt(planBirthYear) > Integer.parseInt(userBirthYear)){
-                    result.put("Birth","Success");
+                genderOk = planGender.equals(userGender) ? true: false;
+                birthOk = Integer.parseInt(planBirthYear) > Integer.parseInt(userBirthYear) ? true: false;
+//                //참여조건이 성별
+//                if(planGender.equals(userGender)){
+//                    genderOk = true;
+//                    //result.put("Gender","Success");
+//                }
+//                else{
+//                    genderOk = false;
+//                    // result.put("Gender","Fail");
+//                }
+//
+//                //참여조건 연령
+//                if(Integer.parseInt(planBirthYear) > Integer.parseInt(userBirthYear)){
+//                    birthOk = true;
+//                    // result.put("Birth","Success");
+//                }
+//                else{
+//                    birthOk = false;
+//                    // result.put("Birth","Fail");
+//                }
+
+                if(genderOk && birthOk){
+                    result.put("result","Success");
                 }
-                else{
-                    result.put("Birth","Fail");
+                else {
+                    result.put("result","Fail");
                 }
             }
-            else if(planGender != null){
-                //참여조건이 성별
-                if(planGender == userGender){
-                    result.put("Gender","Success");
+            else if(!StringUtils.isEmpty(planGender) || !StringUtils.isEmpty(planBirthYear))
+            {
+                if(!StringUtils.isEmpty(planGender)){
+                    //참여조건이 성별
+                    if(planGender == userGender){
+                        result.put("result","Success");
+                    }
+                    else{
+                        result.put("result","Fail");
+                    }
                 }
-                else{
-                    result.put("Gender","Fail");
+                else if(!StringUtils.isEmpty(planBirthYear)){
+                    //참여조건이 연령
+                    if(Integer.parseInt(planBirthYear) > Integer.parseInt(userBirthYear)){
+                        result.put("result","Success");
+                    }
+                    else{
+                        result.put("result","Fail");
+                    }
                 }
             }
-            else if(planBirthYear != null){
-                //참여조건이 연령
-                if(Integer.parseInt(planBirthYear) < Integer.parseInt(userBirthYear)){
-                    result.put("Birth","Success");
-                }
-                else{
-                    result.put("Birth","Fail");
-                }
+            else
+            {
+                result.put("result","Success");
             }
         }catch (Exception e){
 
