@@ -109,4 +109,41 @@
             ) A
         GROUP BY A.USER_ID,A.USER_NICKNAME
     </select>
+
+    <!--플랜 참여 신청 -->
+    <select id="joinPlanList" resultType="Map">
+        SELECT plan_id ,gender ,birth_year
+        FROM PLAN_INFO
+        WHERE plan_id = #{planId}
+    </select>
+
+    <select id="joinUserList" resultType="Map">
+        SELECT user_gender,user_birth_year
+        FROM TBL_USER
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="planJoinUserList" resultType="Map">
+        SELECT id,plan_id,user_id,join_date
+        FROM TBL_PLAN_JOIN_MEMBER
+        WHERE PLAN_ID = #{planId}
+          AND USER_ID =  #{userId}
+    </select>
+
+    <insert id="createjoinUser" parameterType="java.util.HashMap">
+        INSERT INTO TBL_PLAN_JOIN_MEMBER
+            (
+                PLAN_ID,
+                USER_ID,
+                JOIN_DATE,
+                ROLE_TYPE
+            )
+            VALUES
+        (
+            #{planId},
+            #{userId},
+            now(),
+            'ROLE002'
+            )
+    </insert>
 </mapper>

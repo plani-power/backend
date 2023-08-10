@@ -188,4 +188,22 @@ public class PlanController {
 
         return result;
     }
+
+    //플랜 참여 신청
+    @PostMapping (value="plans/Join")
+    public Map<String,Object> planJoin(HttpServletRequest request, HttpServletResponse response,@RequestBody Map<String,Object> param)
+    {
+        Map<String,Object> result = new HashMap<>();
+
+        try{
+            Map planJoin = planService.planJoin(param);
+            result.put("resultCode", planJoin);
+           // result.put("message", "success!!");
+        }
+        catch (Exception e){
+            result.put("resultCode", "400");
+            result.put("message", "촤하하하하 실패!");
+        }
+        return result;
+    }
 }
