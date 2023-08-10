@@ -160,4 +160,40 @@ public class PlanController {
 
         return result;
     }
+    // 플랜 상세조회 > 적극왕 조회
+    @GetMapping(value="plans/joinKing/{planId}")
+    public Map<String, Object> joinKingList(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
+        Map<String, Object> result = new HashMap<>();
+
+        List<Object> joinKingList = planService.joinKing(planId);
+
+        try {
+            result.put("resultCode", "200");
+            result.put("joinKingList", joinKingList);
+            result.put("message", "success!!");
+        }catch (Exception e) {
+            result.put("resultCode", "400");
+            result.put("message", "Fail!!!");
+        }
+
+        return result;
+    }
+
+    //플랜 참여 신청
+    @PostMapping (value="plans/Join")
+    public Map<String,Object> planJoin(HttpServletRequest request, HttpServletResponse response,@RequestBody Map<String,Object> param)
+    {
+        Map<String,Object> result = new HashMap<>();
+
+        try{
+            Map planJoin = planService.planJoin(param);
+            result.put("resultCode", planJoin);
+           // result.put("message", "success!!");
+        }
+        catch (Exception e){
+            result.put("resultCode", "400");
+            result.put("message", "촤하하하하 실패!");
+        }
+        return result;
+    }
 }

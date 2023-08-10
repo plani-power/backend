@@ -97,4 +97,60 @@
           ON B.USER_ID = C.USER_ID
         WHERE A.PLAN_ID = #{plan_id}
     </select>
+
+    <!--플랜 상세조회 > 적극왕 조회 -->
+    <select id="joinKing" parameterType="int" resultType="Map">
+        SELECT A.USER_ID
+             ,A.USER_NICKNAME
+             ,SUM(A.ATTENDANCE) AS ATTENDANCE
+             ,RANK() OVER (ORDER BY SUM(A.ATTENDANCE) DESC) AS RANKING
+        FROM
+            (
+                SELECT T1.USER_ID
+                     , T3.USER_NICKNAME
+                     ,IFNULL(T2.IS_ATTENDANCE,0) AS ATTENDANCE
+                FROM TBL_PLAN_MEMBER T1
+                         LEFT OUTER JOIN TBL_SCHEDULE_JOIN_MEMBER T2 ON T1.USER_ID = T2.MEMBER_ID AND T1.PLAN_ID = T2.PLAN_ID
+                         LEFT OUTER JOIN TBL_USER T3 ON T3.USER_ID = T1.USER_ID
+                WHERE T1.PLAN_ID = #{planId}
+            ) A
+        GROUP BY A.USER_ID,A.USER_NICKNAME
+    </select>
+
+    <!--플랜 참여 신청 -->
+    <select id="joinPlanList" resultType="Map">
+        SELECT plan_id ,gender ,birth_year
+        FROM PLAN_INFO
+        WHERE plan_id = #{planId}
+    </select>
+
+    <select id="joinUserList" resultType="Map">
+        SELECT user_gender,user_birth_year
+        FROM TBL_USER
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="planJoinUserList" resultType="Map">
+        SELECT id,plan_id,user_id,join_date
+        FROM TBL_PLAN_JOIN_MEMBER
+        WHERE PLAN_ID = #{planId}
+          AND USER_ID =  #{userId}
+    </select>
+
+    <insert id="createjoinUser" parameterType="java.util.HashMap">
+        INSERT INTO TBL_PLAN_JOIN_MEMBER
+            (
+                PLAN_ID,
+                USER_ID,
+                JOIN_DATE,
+                ROLE_TYPE
+            )
+            VALUES
+        (
+            #{planId},
+            #{userId},
+            now(),
+            'ROLE002'
+            )
+    </insert>
 </mapper>
