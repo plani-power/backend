@@ -68,7 +68,7 @@ public class JoinServiceImpl implements JoinService {
             {
                 if(!StringUtils.isEmpty(planGender)){
                     //참여조건이 성별
-                    if(planGender == userGender){
+                    if(planGender.equals(userGender)){
                         result.put("result","Success");
                     }
                     else{
