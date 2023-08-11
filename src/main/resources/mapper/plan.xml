@@ -131,19 +131,21 @@
     </select>
 
     <insert id="createjoinUser" parameterType="java.util.HashMap">
-        INSERT INTO TBL_PLAN_JOIN_MEMBER
+        INSERT INTO TBL_PLAN_MEMBER
             (
                 PLAN_ID,
                 USER_ID,
+                ROLE_TYPE,
                 JOIN_DATE,
-                ROLE_TYPE
+                STATE_VALUE
             )
             VALUES
         (
             #{planId},
             #{userId},
-            now(),
-            'ROLE002'
+            'ROLE002',
+            NOW(),
+            'APPLY002'
             )
     </insert>
 </mapper>

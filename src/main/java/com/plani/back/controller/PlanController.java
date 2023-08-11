@@ -1,6 +1,7 @@
 package com.plani.back.controller;
 import com.plani.back.service.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -190,12 +191,21 @@ public class PlanController {
     }
 
     //플랜 참여 신청
-    @PostMapping (value="plans/Join")
+    @PostMapping (value="plans/join")
     public Map<String,Object> planJoin(HttpServletRequest request, HttpServletResponse response,@RequestBody Map<String,Object> param)
     {
         Map<String,Object> result = new HashMap<>();
 
         try{
+
+            for (var data :param.entrySet()) {
+                if(StringUtils.isEmpty(data.getValue())){
+                    result.put("resultCode",400);
+                    result.put("message",data.getKey()+"가 null");
+                    return result;
+                }
+            }
+
             Map planJoin = planService.planJoin(param);
             result.put("resultCode", planJoin);
            // result.put("message", "success!!");
