@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-
+deploy.sh
 # Log file
 *.log
 

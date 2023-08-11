@@ -25,10 +25,10 @@
     </select>
 
     <insert id="createPlan" parameterType="Map">
-        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, UPDATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_TIME, START_DATE, END_DATE, MAX_MEMBER_NUM, GENDER, BIRTH_YEAR, IS_DELETED, PLAN_PWD)
-        VALUES (#{plan_name}, #{created_user}, #{onoff_type}, #{hashtag}, now(), now(), #{is_public},
-                #{status}, #{default_time}, STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
-                #{max_member_num}, #{gender}, #{birth_year}, FALSE, #{plan_pwd})
+        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_START_TIME, DEFAULT_END_TIME, START_DATE, END_DATE, MAX_MEMBER_NUM, GENDER, BIRTH_YEAR, IS_DELETED, PLAN_PWD, REGION, REGION_PART, KEYWORD, INTRO)
+        VALUES (#{plan_name}, #{created_user}, #{onoff_type}, #{hashtag}, now(), #{is_public},
+                'PLAN002', STR_TO_DATE(#{default_start_time}, '%H%i%s'), STR_TO_DATE(#{default_end_time}, '%H%i%s'), STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
+                #{max_member_num}, #{gender}, #{birth_year}, 0, #{plan_pwd}, #{region}, #{region_part}, #{keyword}, #{intro})
         <selectKey resultType="int" keyProperty="PLAN_ID" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -48,12 +48,19 @@
                UPDATE_PLAN_DATE,
                IS_PUBLIC,
                STATUS,
-               DEFAULT_TIME,
+               DEFAULT_START_TIME,
+               DEFAULT_END_TIME,
                START_DATE,
                END_DATE,
                MAX_MEMBER_NUM,
                GENDER,
-               BIRTH_YEAR
+               BIRTH_YEAR,
+               PLAN_PWD,
+               REGION,
+               REGION_PART,
+               VIEWS,
+               KEYWORD,
+               INTRO
         FROM PLAN_INFO
         WHERE PLAN_ID = #{plan_id}
     </select>

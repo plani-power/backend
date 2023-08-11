@@ -18,7 +18,9 @@ public class PlanController {
     
     // 플랜 조회 컨트롤러
     @GetMapping(value="plans")
-    public Map<String, Object> planList(HttpServletRequest request, HttpServletResponse response) {
+    public Map<String, Object> planList(HttpServletRequest request, HttpServletResponse response,
+        @RequestParam(value="", required=false) String test1,
+        @RequestParam(value="", required=false) String test2) {
         Map<String, Object> result = new HashMap<>();
         List<Object> planList = planService.planList();
 
@@ -55,24 +57,12 @@ public class PlanController {
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("user_id", param.get("created_user").toString());
             userInfo.put("plan_id", param.get("PLAN_ID"));
-            userInfo.put("role_type", "플랜장");
+            userInfo.put("role_type", "ROLE001");
 
             planService.planLeader(userInfo);
 
-            String onOffType = param.get("onoff_type").toString();
-            if(onOffType.equals("online")) {
                 result.put("resultCode", "200");
                 result.put("message", "success!");
-                result.put("onOff", "online");
-            } else if(onOffType.equals("offline")) {
-                result.put("resultCode", "200");
-                result.put("message", "success!");
-                result.put("onOff", "offline");
-            } else {
-                result.put("resultCode", "200");
-                result.put("message", "success!");
-                result.put("onOff", "online offline both");
-            }
         }catch (Exception e) {
             System.out.println(e);
             result.put("resultCode", "400");
