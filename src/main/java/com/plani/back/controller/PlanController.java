@@ -18,10 +18,13 @@ public class PlanController {
     // 플랜 조회 컨트롤러
     @GetMapping(value="plans")
     public Map<String, Object> planList(HttpServletRequest request, HttpServletResponse response,
-        @RequestParam(value="", required=false) String test1,
-        @RequestParam(value="", required=false) String test2) {
+        @RequestParam(value="onoffType", required=false) String onoffType,
+        @RequestParam(value="status", required=false) boolean status,
+        @RequestParam(value="order", required=false) String order,
+        @RequestParam(value="keyword", required=false) String keyword,
+        @RequestParam int page) {
         Map<String, Object> result = new HashMap<>();
-        List<Object> planList = planService.planList();
+        List<Object> planList = planService.planList(onoffType, status, order, page, keyword);
 
         try {
             result.put("planList", planList);
@@ -41,15 +44,29 @@ public class PlanController {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            System.out.println(param);
-            String isPublic = param.get("is_public").toString();
+            String isPublic = String.valueOf(param.get("is_public"));
             String planPwd = String.valueOf(param.get("plan_pwd"));
 
-            if("false".equals(isPublic) && ("".equals(planPwd) || "null".equals(planPwd))) {
+            if("0".equals(isPublic) && ("".equals(planPwd) || "null".equals(planPwd))) {
                 result.put("resultCode", "400");
                 result.put("message", "비밀번호를 입력하세요.");
                 return result;
             }
+
+            String isConstraints = String.valueOf(param.get("is_constraints"));
+            String gender = String.valueOf(param.get("gender"));
+            String birth = String.valueOf(param.get("birth_year"));
+
+            if("1".equals(isConstraints) && ("".equals(gender) || "null".equals(gender) || "".equals(birth) || "null".equals(birth))) {
+                result.put("resultCode", "400");
+                result.put("message", "제한 조건이 설정되지 않았습니다.");
+                return result;
+            } else if ("0".equals(isConstraints) && !("".equals(gender) || "null".equals(gender) || "".equals(birth) || "null".equals(birth))) {
+                result.put("resultCode", "400");
+                result.put("message", "제한 조건이 true가 아닙니다.");
+                return result;
+            }
+
             planService.createPlan(param);
 
             // 추후에 로그인 토큰 등이 개발되면 수정, 현재는 user 정보가 없기 때문에 하드코딩으로 넘어가겠습니다.
@@ -60,8 +77,8 @@ public class PlanController {
 
             planService.planLeader(userInfo);
 
-                result.put("resultCode", "200");
-                result.put("message", "success!");
+            result.put("resultCode", "200");
+            result.put("message", "success!");
         }catch (Exception e) {
             System.out.println(e);
             result.put("resultCode", "400");
@@ -70,7 +87,8 @@ public class PlanController {
 
         return result;
     }
-
+    
+    // 플랜 상세보기
     @GetMapping(value="plans/{planId}")
     public Map<String, Object> planDetail(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
         Map<String, Object> result = new HashMap<>();
@@ -87,15 +105,39 @@ public class PlanController {
 
         return result;
     }
-
+    
+    // 플랜 수정
     @PutMapping(value="plans/{planId}")
     public Map<String, Object> updatePlan(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId, @RequestBody Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>();
         param.put("plan_id", planId);
 
-        planService.updatePlan(param);
-
         try {
+            String isPublic = String.valueOf(param.get("is_public"));
+            String planPwd = String.valueOf(param.get("plan_pwd"));
+
+            if("0".equals(isPublic) && ("".equals(planPwd) || "null".equals(planPwd))) {
+                result.put("resultCode", "400");
+                result.put("message", "비밀번호를 입력하세요.");
+                return result;
+            }
+
+            String isConstraints = String.valueOf(param.get("is_constraints"));
+            String gender = String.valueOf(param.get("gender"));
+            String birth = String.valueOf(param.get("birth_year"));
+
+            if("1".equals(isConstraints) && ("".equals(gender) || "null".equals(gender) || "".equals(birth) || "null".equals(birth))) {
+                result.put("resultCode", "400");
+                result.put("message", "제한 조건이 설정되지 않았습니다.");
+                return result;
+            } else if ("0".equals(isConstraints) && !("".equals(gender) || "null".equals(gender) || "".equals(birth) || "null".equals(birth))) {
+                result.put("resultCode", "400");
+                result.put("message", "제한 조건이 true가 아닙니다.");
+                return result;
+            }
+
+            planService.updatePlan(param);
+
             result.put("resultCode", "200");
             result.put("message", "success!!");
         }catch (Exception e) {
@@ -106,6 +148,7 @@ public class PlanController {
         return result;
     }
 
+    // 플랜 삭제
     @DeleteMapping(value="plans/{planId}")
     public Map<String, Object> deletePlan(HttpServletRequest request, HttpServletResponse response, @PathVariable int planId) {
         Map<String, Object> result = new HashMap<>();

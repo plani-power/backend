@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 @Mapper
 public interface PlanMapper {
-    List<Object> planList();
+    List<Object> planList(String onoffType, boolean status, String order, int page, String keyword);
     int createPlan(Map<String, Object> param);
     int planLeader(Map<String, Object> param);
     Map<String, Object> planDetail(int planId);

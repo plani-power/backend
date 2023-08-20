@@ -16,8 +16,8 @@ public class PlanServiceImpl implements PlanService {
     PlanMapper planMapper;
 
     @Override
-    public List<Object> planList() {
-        return planMapper.planList();
+    public List<Object> planList(String onoffType, boolean status, String order, int page, String keyword) {
+        return planMapper.planList(onoffType, status, order, page, keyword);
     }
 
     @Override
