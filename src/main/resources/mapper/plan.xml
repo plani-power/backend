@@ -5,30 +5,34 @@
 
 <mapper namespace="com.plani.back.mapper.PlanMapper">
     <select id="planList" resultType="Map">
-        SELECT PLAN_ID,
-               PLAN_NAME,
-               CREATED_USER,
-               ONOFF_TYPE,
-               HASHTAG,
-               CREATE_PLAN_DATE,
-               UPDATE_PLAN_DATE,
-               IS_PUBLIC,
-               STATUS,
-               DEFAULT_TIME,
-               START_DATE,
-               END_DATE,
-               MAX_MEMBER_NUM,
-               GENDER,
-               BIRTH_YEAR
-        FROM PLAN_INFO
-        WHERE IS_DELETED = FALSE
+        SELECT P.PLAN_ID,
+               P.PLAN_NAME,
+               P.CREATED_USER,
+               C1.CODE_NM AS ONOFF_TYPE,
+               P.HASHTAG,
+               C2.CODE_NM AS STATUS,
+               P.CREATE_PLAN_DATE
+        FROM PLAN_INFO P JOIN TBL_CODE C1
+          ON P.ONOFF_TYPE = C1.CODE
+        JOIN TBL_CODE C2
+          ON P.STATUS = C2.CODE
+        WHERE (IS_DELETED = 0 OR IS_DELETED IS NULL)
+          AND IS_PUBLIC = 1
+        <if test='onoffType != null'>AND C1.CODE_NM = #{onoffType}</if>
+        <if test='status == true'>AND P.STATUS = 'PLAN002'</if>
+        <if test='keyword != null or "".equals(keyword)'>AND (PLAN_NAME LIKE CONCAT('%',#{keyword},'%') OR HASHTAG LIKE CONCAT('%',#{keyword},'%'))</if>
+        <if test='order == null'>ORDER BY CREATE_PLAN_DATE DESC</if>
+        <if test='"name".equals(order)'>ORDER BY P.PLAN_NAME</if>
+        <if test='"pop".equals(order)'>ORDER BY P.VIEW DESC</if>
+        LIMIT 10
+        OFFSET #{page}
     </select>
 
     <insert id="createPlan" parameterType="Map">
-        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, IS_PUBLIC, STATUS, DEFAULT_START_TIME, DEFAULT_END_TIME, START_DATE, END_DATE, MAX_MEMBER_NUM, GENDER, BIRTH_YEAR, IS_DELETED, PLAN_PWD, REGION, REGION_PART, KEYWORD, INTRO)
+        INSERT INTO PLAN_INFO (PLAN_NAME, CREATED_USER, ONOFF_TYPE, HASHTAG, CREATE_PLAN_DATE, IS_PUBLIC, STATUS,IS_DEFAULT, DEFAULT_START_TIME, DEFAULT_END_TIME, START_DATE, END_DATE, MAX_MEMBER_NUM,IS_CONSTRAINTS, GENDER, BIRTH_YEAR, IS_DELETED, PLAN_PWD, REGION, REGION_PART, KEYWORD, INTRO)
         VALUES (#{plan_name}, #{created_user}, #{onoff_type}, #{hashtag}, now(), #{is_public},
-                'PLAN002', STR_TO_DATE(#{default_start_time}, '%H%i%s'), STR_TO_DATE(#{default_end_time}, '%H%i%s'), STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
-                #{max_member_num}, #{gender}, #{birth_year}, 0, #{plan_pwd}, #{region}, #{region_part}, #{keyword}, #{intro})
+                'PLAN002',#{is_default}, STR_TO_DATE(#{default_start_time}, '%H%i%s'), STR_TO_DATE(#{default_end_time}, '%H%i%s'), STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
+                #{max_member_num}, #{is_constraints}, #{gender}, #{birth_year}, 0, #{plan_pwd}, #{region}, #{region_part}, #{keyword}, #{intro})
         <selectKey resultType="int" keyProperty="PLAN_ID" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -67,9 +71,21 @@
 
     <update id="updatePlan" parameterType="Map">
         UPDATE PLAN_INFO
-        SET PLAN_NAME = #{plan_name}, ONOFF_TYPE = #{onoff_type}, HASHTAG = #{hashtag}, UPDATE_PLAN_DATE = now(), IS_PUBLIC = #{is_public}, STATUS = #{status},
-            DEFAULT_TIME = #{default_time}, START_DATE = STR_TO_DATE(#{start_date}, '%Y%m%d%H%i%s'), END_DATE = STR_TO_DATE(#{end_date}, '%Y%m%d%H%i%s'),
-            MAX_MEMBER_NUM = #{max_member_num}, GENDER = #{gender}, BIRTH_YEAR = #{birth_year}
+        SET <if test='plan_name!=null'>PLAN_NAME = #{plan_name}, </if>
+        <if test='onoff_type !=null'>ONOFF_TYPE = #{onoff_type}, </if>
+        <if test='hashtag !=null'>HASHTAG = #{hashtag}, </if>
+        <if test='is_public !=null'>IS_PUBLIC = #{is_public}, </if>
+        <if test='plan_pwd !=null'>PLAN_PWD = #{plan_pwd}, </if>
+        <if test='status !=null'>STATUS = #{status}, </if>
+        <if test='is_default !=null'>IS_DEFAULT = #{is_default}, </if>
+        <if test='default_start_time !=null'>DEFAULT_START_TIME = STR_TO_DATE(#{default_start_time}, '%H%i%s'), </if>
+        <if test='default_end_time !=null'>DEFAULT_END_TIME = STR_TO_DATE(#{default_end_time}, '%H%i%s'), </if>
+        <if test='intro !=null'>INTRO = #{intro}, </if>
+        <if test='max_member_num !=null'>MAX_MEMBER_NUM = #{max_member_num}, </if>
+        <if test='is_constraints !=null'>IS_CONSTRAINTS = #{is_constraints}, </if>
+        <if test='gender !=null'>GENDER = #{gender}, </if>
+        <if test='birth_year !=null'>BIRTH_YEAR = #{birth_year}, </if>
+        UPDATE_PLAN_DATE = now()
         WHERE PLAN_ID = #{plan_id}
     </update>
 
