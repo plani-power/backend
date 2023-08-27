@@ -20,10 +20,12 @@
           AND IS_PUBLIC = 1
         <if test='onoffType != null'>AND C1.CODE_NM = #{onoffType}</if>
         <if test='status == true'>AND P.STATUS = 'PLAN002'</if>
-        <if test='keyword != null or "".equals(keyword)'>AND (PLAN_NAME LIKE CONCAT('%',#{keyword},'%') OR HASHTAG LIKE CONCAT('%',#{keyword},'%'))</if>
-        <if test='order == null'>ORDER BY CREATE_PLAN_DATE DESC</if>
-        <if test='"name".equals(order)'>ORDER BY P.PLAN_NAME</if>
-        <if test='"pop".equals(order)'>ORDER BY P.VIEW DESC</if>
+        <if test='keyword != null or "".equals(keyword)'>AND (P.PLAN_NAME LIKE CONCAT('%',#{keyword},'%') OR P.HASHTAG LIKE CONCAT('%',#{keyword},'%'))</if>
+        <choose>
+            <when test='"name".equals(order)'>ORDER BY P.PLAN_NAME</when>
+            <when test='"pop".equals(order)'>ORDER BY P.VIEW DESC</when>
+            <otherwise>ORDER BY P.CREATE_PLAN_DATE DESC</otherwise>
+        </choose>
         LIMIT 10
         OFFSET #{page}
     </select>
@@ -39,7 +41,7 @@
     </insert>
 
     <insert id="planLeader" parameterType="Map">
-        INSERT INTO TBL_PLAN_MEMBER (USER_ID, PLAN_ID, ROLE_TYPE, JOIN_DATE) VALUES (#{user_id}, #{plan_id}, #{role_type}, now());
+        INSERT INTO TBL_PLAN_JOIN_MEMBER (PLAN_ID, USER_ID, STATUS, JOIN_DATE, ROLE_TYPE) VALUES (#{plan_id}, #{user_id}, '완료', now(), '플랜장');
     </insert>
 
     <select id="planDetail" resultType="Map">
